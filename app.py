@@ -8,8 +8,12 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app=Flask(__name__); app.config["SECRET_KEY"]=os.getenv("SECRET_KEY","dev-only-change-me")
-url=os.getenv("DATABASE_URL","sqlite:///spendora.db")
-if url.startswith("postgres://"): url=url.replace("postgres://","postgresql://",1)
+url = os.getenv("DATABASE_URL", "sqlite:///spendora.db")
+
+if url.startswith("postgres://"):
+    url = url.replace("postgres://", "postgresql+psycopg://", 1)
+elif url.startswith("postgresql://"):
+    url = url.replace("postgresql://", "postgresql+psycopg://", 1)
 app.config["SQLALCHEMY_DATABASE_URI"]=url; app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]=False
 db=SQLAlchemy(app); lm=LoginManager(app); lm.login_view="login"
 
