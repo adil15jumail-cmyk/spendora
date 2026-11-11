@@ -1,0 +1,2 @@
+self.addEventListener("push",e=>{let d={};try{d=e.data.json()}catch(_){d={body:e.data?.text()||"Subscription reminder"}}e.waitUntil(self.registration.showNotification(d.title||"Spendora reminder",{body:d.body||"A subscription renews soon.",data:{url:d.url||"/dashboard"}}))});
+self.addEventListener("notificationclick",e=>{e.notification.close();e.waitUntil(clients.openWindow(new URL(e.notification.data.url||"/dashboard",self.location.origin).href))});
